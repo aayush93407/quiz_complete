@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LinkedIn Skill Quiz - Login</title>
+  <style>
+    @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css');
+
+    body {
+      background: #e6f0f8;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .card {
+      border-radius: 12px;
+      border: 2px solid #186fa0;
+      background: white;
+      box-shadow: 0 6px 12px rgba(24,111,160,0.2);
+      max-width: 420px;
+      width: 100%;
+      padding: 2rem;
+    }
+    h2 {
+      color: #186fa0;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+    label {
+      font-weight: 600;
+      color: #186fa0;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      border: 2px solid #4caf50;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      width: 100%;
+      transition: border-color 0.3s ease;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #0d6efd;
+      box-shadow: 0 0 8px #0d6efd66;
+    }
+    button {
+      background: #186fa0;
+      color: white;
+      font-weight: 700;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-size: 1.1rem;
+    }
+    button:hover {
+      background: #0b4a6e;
+    }
+    .footer-text {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      text-align: center;
+      color: #186fa0cc;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>LinkedIn Skill Quiz Login</h2>
+    <form method="POST" action="/">
+      <label for="linkedin_url">LinkedIn Profile URL</label>
+      <input type="text" id="linkedin_url" name="linkedin_url" placeholder="https://www.linkedin.com/in/username" required />
+
+      <label for="email">LinkedIn Email</label>
+      <input type="email" id="email" name="email" placeholder="your.email@example.com" required />
+
+      <label for="password">LinkedIn Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your LinkedIn password" required />
+
+      <button type="submit">Start Quiz</button>
+    </form>
+    <div class="footer-text">Your credentials are used only for profile scraping and not stored permanently.</div>
+  </div>
+</body>
+</html>

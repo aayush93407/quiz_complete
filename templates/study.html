@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Study Material</title>
+  <style>
+    body {
+      background-color: #f0fbf9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 2rem;
+      color: #023047;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(2,48,71,0.15);
+      padding: 2rem 3rem;
+    }
+    h1, h2, h3, h4 {
+      color: #219ebc;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+    }
+    h1 {
+      border-bottom: 3px solid #219ebc;
+      padding-bottom: 0.3rem;
+    }
+
+    ul {
+      list-style-type: disc;
+      margin-left: 0;
+      padding-left: 1.5rem;
+    }
+
+    ul ul {
+      list-style-type: disc;
+      margin-left: 0;
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+      line-height: 1.5;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      line-height: 1.5;
+      color: #023047;
+    }
+
+    strong {
+      font-weight: 700;
+    }
+
+    u {
+      text-decoration: underline;
+    }
+
+    .export-btn {
+      margin-bottom: 1rem;
+      display: inline-block;
+      background-color: #219ebc;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .export-btn:hover {
+      background-color: #126782;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="content">
+    <button class="export-btn" onclick="exportToPDF()">Export to PDF</button>
+
+    <h1>Study Material</h1>
+
+    {% for topic, content in study.items() %}
+      <section>
+        <h2><u>{{ topic }}</u></h2>
+
+        {% set lines = content.split('\n') %}
+        {% set inside_list = false %}
+        {% for line in lines %}
+          {% set is_last = loop.index == loop.length %}
+
+          {% if line.startswith('### ') %}
+            {% if inside_list %}</ul>{% set inside_list = false %}{% endif %}
+            <h3><strong><u>{{ line[4:] }}</u></strong></h3>
+
+          {% elif line.startswith('#### ') %}
+            {% if inside_list %}</ul>{% set inside_list = false %}{% endif %}
+            <h4><strong>{{ line[5:] }}</strong></h4>
+
+          {% elif line.strip().startswith('- ') %}
+            {% if not inside_list %}
+              <ul>
+              {% set inside_list = true %}
+            {% endif %}
+            <li><strong>{{ line.strip()[2:] }}</strong></li>
+
+            {% set next_line = lines[loop.index] if not is_last else '' %}
+            {% if is_last or not next_line.strip().startswith('- ') %}
+              </ul>
+              {% set inside_list = false %}
+            {% endif %}
+
+          {% elif line.strip() == '' %}
+            {% if inside_list %}</ul>{% set inside_list = false %}{% endif %}
+            <br/>
+
+          {% else %}
+            {% if inside_list %}</ul>{% set inside_list = false %}{% endif %}
+            <p>{{ line }}</p>
+          {% endif %}
+        {% endfor %}
+        {% if inside_list %}</ul>{% endif %}
+      </section>
+    {% endfor %}
+  </div>
+
+  <!-- JS Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    async function exportToPDF() {
+      const { jsPDF } = window.jspdf;
+      const content = document.getElementById('content');
+
+      const canvas = await html2canvas(content, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+
+      const pdf = new jsPDF('p', 'pt', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('study_material.pdf');
+    }
+  </script>
+</body>
+</html>
